@@ -9,7 +9,7 @@ import GuidesSection from "@/components/GuidesSection";
 import TranslationHelper from "@/components/TranslationHelper";
 import InteractiveMap from "@/components/InteractiveMap";
 import ItineraryBuilder from "@/components/ItineraryBuilder";
-import { Mountain, Waves, Circle, Users, MapPin, Calendar, Phone } from "lucide-react";
+import { Mountain, Waves, Layers, Users, MapPin, Calendar, Phone } from "lucide-react";
 
 const quickLinks = [
   {
@@ -31,7 +31,7 @@ const quickLinks = [
   {
     title: "Musanze Caves",
     description: "Underground adventure exploration",
-    icon: Circle,
+    icon: Layers,
     href: "/musanze-caves",
     color: "bg-orange-500",
     badge: "Adventure"
