@@ -1,1 +1,4 @@
 project_id = "dcbcjlzzbkjyeqqylfnl"
+
+[functions.virtual-guide]
+verify_jwt = false
