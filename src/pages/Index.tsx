@@ -9,6 +9,8 @@ import GuidesSection from "@/components/GuidesSection";
 import TranslationHelper from "@/components/TranslationHelper";
 import InteractiveMap from "@/components/InteractiveMap";
 import ItineraryBuilder from "@/components/ItineraryBuilder";
+import TravelCostCalculator from "@/components/TravelCostCalculator";
+import WeatherUpdates from "@/components/WeatherUpdates";
 import { Mountain, Waves, Layers, Users, MapPin, Calendar, Phone } from "lucide-react";
 
 const quickLinks = [
@@ -104,6 +106,8 @@ const Index = () => {
       <PlacesSection />
       <InteractiveMap />
       <ItineraryBuilder />
+      <TravelCostCalculator />
+      <WeatherUpdates />
       <HotelsSection />
       <GuidesSection />
       <TranslationHelper />
