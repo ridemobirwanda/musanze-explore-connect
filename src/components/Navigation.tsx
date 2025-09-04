@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, MapPin, Phone, Mail } from "lucide-react";
+import { Menu, MapPin, Phone, Mail, Shield } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { canAccess } = useAuth();
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -49,6 +51,16 @@ const Navigation = () => {
 
         {/* Contact Info & Mobile Menu */}
         <div className="flex items-center space-x-4">
+          {/* Admin Access */}
+          {canAccess && (
+            <Link to="/admin" className="hidden md:flex">
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                Admin
+              </Button>
+            </Link>
+          )}
+          
           <div className="hidden lg:flex items-center space-x-4 text-sm text-muted-foreground">
             <div className="flex items-center space-x-1">
               <Phone className="h-4 w-4" />
@@ -83,6 +95,19 @@ const Navigation = () => {
                     {link.label}
                   </Link>
                 ))}
+                
+                {/* Admin Access for Mobile */}
+                {canAccess && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className="text-lg font-medium transition-colors hover:text-primary text-muted-foreground flex items-center gap-2 border-t pt-4"
+                  >
+                    <Shield className="h-4 w-4" />
+                    Admin Panel
+                  </Link>
+                )}
+                
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Phone className="h-4 w-4" />
