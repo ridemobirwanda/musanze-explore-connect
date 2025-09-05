@@ -14,6 +14,11 @@ import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./pages/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminBookings from "./pages/AdminBookings";
+import AdminUsers from "./pages/AdminUsers";
+import AdminEvents from "./pages/AdminEvents";
+import AdminContent from "./pages/AdminContent";
+import AdminPayments from "./pages/AdminPayments";
 import { AuthProvider } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
@@ -68,6 +73,11 @@ const App = () => (
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
+              <Route path="bookings" element={<AdminBookings />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="events" element={<AdminEvents />} />
+              <Route path="content" element={<AdminContent />} />
+              <Route path="payments" element={<AdminPayments />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
