@@ -20,12 +20,12 @@ const AdminLogin = () => {
   const { toast } = useToast();
 
   // Redirect if already authenticated and has access
-  if (user && canAccess) {
+  if (!authLoading && user && canAccess) {
     return <Navigate to="/admin" replace />;
   }
 
-  // Redirect regular users to home
-  if (user && !canAccess) {
+  // Redirect regular users to home (only if we're sure they don't have access)
+  if (!authLoading && user && !canAccess) {
     return <Navigate to="/" replace />;
   }
 

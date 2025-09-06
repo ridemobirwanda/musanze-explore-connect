@@ -69,16 +69,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          // Fetch profile in a separate async operation
+          // Keep loading true while fetching profile
+          setLoading(true);
           setTimeout(async () => {
             const profileData = await fetchProfile(session.user.id);
             setProfile(profileData);
+            setLoading(false);
           }, 0);
         } else {
           setProfile(null);
+          setLoading(false);
         }
-
-        setLoading(false);
       }
     );
 
@@ -88,13 +89,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(session?.user ?? null);
 
       if (session?.user) {
+        setLoading(true);
         setTimeout(async () => {
           const profileData = await fetchProfile(session.user.id);
           setProfile(profileData);
+          setLoading(false);
         }, 0);
+      } else {
+        setLoading(false);
       }
-      
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
