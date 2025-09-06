@@ -71,6 +71,48 @@ const AdminLogin = () => {
     }
   };
 
+  const createAdminUser = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`https://dcbcjlzzbkjyeqqylfnl.supabase.co/functions/v1/create-admin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      const result = await response.json();
+      
+      if (result.error) throw new Error(result.error);
+      
+      toast({
+        title: "Success",
+        description: "Admin user created! You can now sign in with admin@admin.com",
+      });
+      
+      // Auto-fill the login form
+      setEmail('admin@admin.com');
+      setPassword('admin123');
+      setIsSignUp(false);
+      
+    } catch (error: any) {
+      toast({
+        title: "Info",
+        description: error.message.includes('already') ? "Admin user already exists. Try signing in." : error.message,
+        variant: error.message.includes('already') ? "default" : "destructive",
+      });
+      
+      // If user exists, auto-fill login
+      if (error.message.includes('already')) {
+        setEmail('admin@admin.com');
+        setPassword('admin123');
+        setIsSignUp(false);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -158,7 +200,7 @@ const AdminLogin = () => {
             </Button>
           </form>
           
-          <div className="mt-4 text-center">
+          <div className="mt-4 text-center space-y-3">
             <Button
               variant="link"
               onClick={() => setIsSignUp(!isSignUp)}
@@ -169,6 +211,20 @@ const AdminLogin = () => {
                 : 'Need an admin account? Create one'
               }
             </Button>
+            
+            <div className="pt-3 border-t">
+              <Button 
+                variant="outline" 
+                onClick={createAdminUser}
+                disabled={loading}
+                className="w-full"
+              >
+                Create Default Admin User
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">
+                Creates admin@admin.com with password: admin123
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
