@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Star, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import gorillaImage from "@/assets/gorilla-attraction.jpg";
 
 const places = [
@@ -37,6 +38,7 @@ const places = [
 ];
 
 const PlacesSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-20 bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto px-4">
@@ -90,7 +92,10 @@ const PlacesSection = () => {
                     {place.price}
                     <span className="text-sm text-muted-foreground font-normal">/person</span>
                   </div>
-                  <Button className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300">
+                  <Button 
+                    className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300"
+                    onClick={() => navigate('/booking')}
+                  >
                     Book Now
                   </Button>
                 </div>

@@ -15,6 +15,7 @@ import {
   Star,
   ArrowRight
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Event {
   id: string;
@@ -30,6 +31,7 @@ interface Event {
 }
 
 const EventsCalendar = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const events: Event[] = [
@@ -276,7 +278,7 @@ const EventsCalendar = () => {
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-primary mb-2">{event.price}</p>
-                          <Button size="sm">Book Now</Button>
+                          <Button size="sm" onClick={() => navigate('/booking')}>Book Now</Button>
                         </div>
                       </div>
                     </CardContent>

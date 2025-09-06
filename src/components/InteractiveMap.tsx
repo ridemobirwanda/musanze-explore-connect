@@ -3,8 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Filter, Hotel, Camera, Mountain, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const InteractiveMap = () => {
+  const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const [selectedLocation, setSelectedLocation] = useState<any>(null);
@@ -224,7 +226,10 @@ const InteractiveMap = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button className="flex-1 bg-gradient-hero text-white">
+                    <Button 
+                      className="flex-1 bg-gradient-hero text-white"
+                      onClick={() => navigate('/booking')}
+                    >
                       Book Now
                     </Button>
                     <Button variant="outline" size="icon">

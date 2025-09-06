@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, MapPin, Clock, Camera, Waves } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import gorillaImage from "@/assets/gorilla-attraction.jpg";
 
 const TwinLakes = () => {
+  const navigate = useNavigate();
   const activities = [
     {
       name: "Boat Cruise",
@@ -132,7 +133,10 @@ const TwinLakes = () => {
                       {activity.price}
                       <span className="text-sm text-muted-foreground font-normal">/person</span>
                     </div>
-                    <Button className="bg-gradient-hero text-white">
+                    <Button 
+                      className="bg-gradient-hero text-white"
+                      onClick={() => navigate('/booking')}
+                    >
                       Book Now
                     </Button>
                   </div>
