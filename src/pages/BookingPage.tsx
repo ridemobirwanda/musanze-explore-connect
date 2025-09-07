@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,15 +9,33 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ArrowLeft, Calendar as CalendarIcon, Users, MapPin, Phone, Mail, CreditCard } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
 const BookingPage = () => {
+  const [searchParams] = useSearchParams();
   const [selectedService, setSelectedService] = useState<string>("gorilla-trekking");
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [guests, setGuests] = useState(1);
   const [currentStep, setCurrentStep] = useState(1);
+
+  // Pre-select service based on URL parameters
+  useEffect(() => {
+    const serviceParam = searchParams.get('service');
+    const typeParam = searchParams.get('type');
+    const nameParam = searchParams.get('name');
+    
+    if (serviceParam) {
+      setSelectedService(serviceParam);
+    } else if (typeParam === 'hotel' && nameParam) {
+      // For hotels, we'll add them to the services list dynamically
+      setSelectedService(`hotel-${nameParam.toLowerCase().replace(/\s+/g, '-')}`);
+    } else if (typeParam === 'guide' && nameParam) {
+      // For guides, we'll add them to the services list dynamically  
+      setSelectedService(`guide-${nameParam.toLowerCase().replace(/\s+/g, '-')}`);
+    }
+  }, [searchParams]);
 
   const services = [
     {
@@ -59,6 +77,56 @@ const BookingPage = () => {
       duration: "2-3 hours",
       category: "Adventure",
       description: "Guided exploration of ancient volcanic caves"
+    },
+    // Dynamic hotel bookings
+    {
+      id: "hotel-virunga-lodge",
+      name: "Virunga Lodge Room",
+      price: 450,
+      duration: "per night",
+      category: "Accommodation",
+      description: "Luxury accommodation with stunning volcano views"
+    },
+    {
+      id: "hotel-mountain-gorilla-view-lodge",
+      name: "Mountain Gorilla View Lodge Room",
+      price: 380,
+      duration: "per night",
+      category: "Accommodation",
+      description: "Premium eco-lodge near Volcanoes National Park"
+    },
+    {
+      id: "hotel-le-bambou-gorilla-lodge",
+      name: "Le Bambou Gorilla Lodge Room",
+      price: 220,
+      duration: "per night",
+      category: "Accommodation",
+      description: "Boutique hotel in Kinigi Village"
+    },
+    // Dynamic guide bookings
+    {
+      id: "guide-jean-baptiste-nzeyimana",
+      name: "Guide: Jean Baptiste Nzeyimana",
+      price: 45,
+      duration: "per day",
+      category: "Guide Service",
+      description: "Expert local guide for gorilla trekking and cultural tours"
+    },
+    {
+      id: "guide-marie-claire-uwimana",
+      name: "Guide: Marie Claire Uwimana",
+      price: 40,
+      duration: "per day",
+      category: "Guide Service",
+      description: "Photography and bird watching specialist guide"
+    },
+    {
+      id: "guide-patrick-habimana",
+      name: "Guide: Patrick Habimana",
+      price: 50,
+      duration: "per day",
+      category: "Guide Service",
+      description: "Hiking and cultural immersion expert guide"
     }
   ];
 

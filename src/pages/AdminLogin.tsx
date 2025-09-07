@@ -16,7 +16,7 @@ const AdminLogin = () => {
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { signIn, signUp, user, canAccess, loading: authLoading } = useAuth();
+  const { signIn, signUp, user, canAccess, loading: authLoading, profile } = useAuth();
   const { toast } = useToast();
 
   // Redirect if already authenticated and has access

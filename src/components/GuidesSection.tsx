@@ -144,7 +144,7 @@ const GuidesSection = () => {
                     </Button>
                     <Button 
                       className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300"
-                      onClick={() => navigate('/booking')}
+                      onClick={() => navigate('/booking?type=guide&name=' + encodeURIComponent(guide.name))}
                     >
                       Book Guide
                     </Button>

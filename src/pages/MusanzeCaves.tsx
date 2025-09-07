@@ -151,7 +151,7 @@ const MusanzeCaves = () => {
                     </div>
                     <Button 
                       className="bg-gradient-hero text-white"
-                      onClick={() => navigate('/booking')}
+                      onClick={() => navigate('/booking?service=musanze-caves')}
                     >
                       Book Tour
                     </Button>
