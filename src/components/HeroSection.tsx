@@ -1,7 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/musanze-hero.jpg";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const scrollToPlaces = () => {
+    const placesSection = document.getElementById('places-section');
+    if (placesSection) {
+      placesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       <div 
@@ -27,6 +37,7 @@ const HeroSection = () => {
           <Button 
             size="lg" 
             className="bg-gradient-hero text-white shadow-hero hover:shadow-lg transition-all duration-300 px-8 py-6 text-lg font-semibold"
+            onClick={scrollToPlaces}
           >
             Explore Places
           </Button>
@@ -34,6 +45,7 @@ const HeroSection = () => {
             variant="outline" 
             size="lg"
             className="border-2 border-white text-white hover:bg-white hover:text-primary transition-all duration-300 px-8 py-6 text-lg font-semibold"
+            onClick={() => navigate('/booking')}
           >
             Book Your Tour
           </Button>

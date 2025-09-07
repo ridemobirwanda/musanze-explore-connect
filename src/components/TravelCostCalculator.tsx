@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Calculator, Users, Calendar, MapPin, DollarSign } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface CostBreakdown {
   accommodation: number;
@@ -18,6 +19,7 @@ interface CostBreakdown {
 }
 
 const TravelCostCalculator = () => {
+  const { toast } = useToast();
   const [days, setDays] = useState<number>(3);
   const [groupSize, setGroupSize] = useState<number>(2);
   const [accommodationType, setAccommodationType] = useState<string>("");
@@ -75,38 +77,65 @@ const TravelCostCalculator = () => {
 
   const calculateCost = () => {
     if (!accommodationType || !transportType) {
+      toast({
+        title: "Missing Information",
+        description: "Please select both accommodation and transportation options.",
+        variant: "destructive",
+      });
       return;
     }
 
-    // Accommodation cost
-    const accommodationCost = accommodationPrices[accommodationType as keyof typeof accommodationPrices] * groupSize * days;
+    if (days < 1 || groupSize < 1) {
+      toast({
+        title: "Invalid Input",
+        description: "Please enter valid numbers for days and group size.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Activities cost
-    const activitiesCost = selectedActivities.reduce((total, activityId) => {
-      return total + (activityPrices[activityId as keyof typeof activityPrices] * groupSize);
-    }, 0);
+    try {
+      // Accommodation cost
+      const accommodationCost = accommodationPrices[accommodationType as keyof typeof accommodationPrices] * groupSize * days;
 
-    // Transport cost
-    const transportCost = transportPrices[transportType as keyof typeof transportPrices] * days;
+      // Activities cost
+      const activitiesCost = selectedActivities.reduce((total, activityId) => {
+        return total + (activityPrices[activityId as keyof typeof activityPrices] * groupSize);
+      }, 0);
 
-    // Food cost (based on accommodation type)
-    let foodCategory = accommodationType === 'luxury' ? 'luxury' : 
-                      accommodationType === 'budget' || accommodationType === 'homestay' ? 'budget' : 'midrange';
-    const foodCost = foodPricePerDay[foodCategory as keyof typeof foodPricePerDay] * groupSize * days;
+      // Transport cost
+      const transportCost = transportPrices[transportType as keyof typeof transportPrices] * days;
 
-    // Permits (gorilla trekking requires separate permit)
-    const permitsCost = selectedActivities.includes('gorilla-trekking') ? 15 * groupSize : 0;
+      // Food cost (based on accommodation type)
+      let foodCategory = accommodationType === 'luxury' ? 'luxury' : 
+                        accommodationType === 'budget' || accommodationType === 'homestay' ? 'budget' : 'midrange';
+      const foodCost = foodPricePerDay[foodCategory as keyof typeof foodPricePerDay] * groupSize * days;
 
-    const total = accommodationCost + activitiesCost + transportCost + foodCost + permitsCost;
+      // Permits (gorilla trekking requires separate permit)
+      const permitsCost = selectedActivities.includes('gorilla-trekking') ? 15 * groupSize : 0;
 
-    setCostBreakdown({
-      accommodation: accommodationCost,
-      activities: activitiesCost,
-      transport: transportCost,
-      food: foodCost,
-      permits: permitsCost,
-      total
-    });
+      const total = accommodationCost + activitiesCost + transportCost + foodCost + permitsCost;
+
+      setCostBreakdown({
+        accommodation: accommodationCost,
+        activities: activitiesCost,
+        transport: transportCost,
+        food: foodCost,
+        permits: permitsCost,
+        total
+      });
+
+      toast({
+        title: "Cost Calculated",
+        description: `Total estimated cost: $${total} for ${groupSize} people`,
+      });
+    } catch (error) {
+      toast({
+        title: "Calculation Error",
+        description: "There was an error calculating your costs. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

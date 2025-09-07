@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Wifi, Car, Coffee, MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import hotelImage from "@/assets/hotel-room.jpg";
 
 const hotels = [
@@ -41,6 +42,8 @@ const hotels = [
 ];
 
 const HotelsSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 bg-secondary/10">
       <div className="container mx-auto px-4">
@@ -98,7 +101,10 @@ const HotelsSection = () => {
                     ${hotel.price}
                     <span className="text-sm text-muted-foreground font-normal">/night</span>
                   </div>
-                  <Button className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300">
+                  <Button 
+                    className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300"
+                    onClick={() => navigate('/booking')}
+                  >
                     Book Room
                   </Button>
                 </div>

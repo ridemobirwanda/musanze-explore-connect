@@ -234,7 +234,12 @@ const EventsCalendar = () => {
                       </p>
                       <div className="flex items-center justify-between pt-2">
                         <span className="font-semibold text-primary">{event.price}</span>
-                        <Button size="sm" variant="outline" className="group-hover:bg-primary group-hover:text-white transition-colors">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="group-hover:bg-primary group-hover:text-white transition-colors"
+                          onClick={() => navigate('/booking')}
+                        >
                           Learn More
                           <ArrowRight className="h-3 w-3 ml-1" />
                         </Button>
@@ -339,7 +344,12 @@ const EventsCalendar = () => {
                       <p className="text-sm text-muted-foreground mb-4">{event.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-primary">{event.price}</span>
-                        <Button size="sm">Learn More</Button>
+                        <Button 
+                          size="sm"
+                          onClick={() => navigate('/booking')}
+                        >
+                          Learn More
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>

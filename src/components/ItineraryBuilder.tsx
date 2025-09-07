@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar, Clock, MapPin, Users, Star, DollarSign } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ItineraryBuilder = () => {
+  const navigate = useNavigate();
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [selectedDuration, setSelectedDuration] = useState<string>("3-day");
   const [generatedItinerary, setGeneratedItinerary] = useState<any>(null);
@@ -262,10 +264,19 @@ const ItineraryBuilder = () => {
                   
                   <div className="pt-6 border-t">
                     <div className="flex gap-3">
-                      <Button className="flex-1 bg-gradient-hero text-white">
+                      <Button 
+                        className="flex-1 bg-gradient-hero text-white"
+                        onClick={() => navigate('/booking')}
+                      >
                         Book This Itinerary
                       </Button>
-                      <Button variant="outline">
+                      <Button 
+                        variant="outline"
+                        onClick={() => {
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                          setGeneratedItinerary(null);
+                        }}
+                      >
                         Customize
                       </Button>
                     </div>

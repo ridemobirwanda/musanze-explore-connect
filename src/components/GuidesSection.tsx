@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Phone, Languages, Award, MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import guideImage from "@/assets/tour-guide.jpg";
 
 const guides = [
@@ -50,6 +51,8 @@ const guides = [
 ];
 
 const GuidesSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto px-4">
@@ -131,10 +134,18 @@ const GuidesSection = () => {
                     <span className="text-sm text-muted-foreground font-normal">/day</span>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="p-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="p-2"
+                      onClick={() => window.open(`tel:${guide.phone}`, '_self')}
+                    >
                       <Phone className="h-4 w-4" />
                     </Button>
-                    <Button className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300">
+                    <Button 
+                      className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300"
+                      onClick={() => navigate('/booking')}
+                    >
                       Book Guide
                     </Button>
                   </div>
