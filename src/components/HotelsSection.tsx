@@ -103,7 +103,7 @@ const HotelsSection = () => {
                   </div>
                   <Button 
                     className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300"
-                    onClick={() => navigate('/booking?type=hotel&name=' + encodeURIComponent(hotel.name))}
+                    onClick={() => navigate(`/book/rooms?room=${encodeURIComponent(hotel.name)}`)}
                   >
                     Book Room
                   </Button>

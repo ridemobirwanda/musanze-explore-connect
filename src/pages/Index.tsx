@@ -95,12 +95,12 @@ const Index = () => {
           </div>
 
           <div className="text-center">
-            <Link to="/booking">
-              <Button size="lg" className="bg-gradient-hero text-white shadow-hero hover:shadow-lg transition-all duration-300">
-                <Calendar className="mr-2 h-5 w-5" />
-                Plan Your Adventure
-              </Button>
-            </Link>
+          <Link to="/book/tours">
+            <Button className="bg-gradient-hero text-white shadow-hero hover:shadow-lg transition-all duration-300">
+              <Calendar className="mr-2 h-5 w-5" />
+              Plan Your Adventure
+            </Button>
+          </Link>
           </div>
         </div>
       </section>

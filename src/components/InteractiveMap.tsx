@@ -228,7 +228,7 @@ const InteractiveMap = () => {
                   <div className="flex gap-2">
                     <Button 
                       className="flex-1 bg-gradient-hero text-white"
-                      onClick={() => navigate('/booking')}
+                      onClick={() => navigate('/book/tours')}
                     >
                       Book Now
                     </Button>

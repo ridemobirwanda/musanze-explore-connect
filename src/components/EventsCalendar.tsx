@@ -238,7 +238,7 @@ const EventsCalendar = () => {
                           size="sm" 
                           variant="outline" 
                           className="group-hover:bg-primary group-hover:text-white transition-colors"
-                          onClick={() => navigate('/booking')}
+                          onClick={() => navigate('/book/tours')}
                         >
                           Learn More
                           <ArrowRight className="h-3 w-3 ml-1" />
@@ -283,7 +283,7 @@ const EventsCalendar = () => {
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-primary mb-2">{event.price}</p>
-                          <Button size="sm" onClick={() => navigate('/booking')}>Book Now</Button>
+                          <Button size="sm" onClick={() => navigate('/book/tours')}>Book Now</Button>
                         </div>
                       </div>
                     </CardContent>
@@ -346,7 +346,7 @@ const EventsCalendar = () => {
                         <span className="font-semibold text-primary">{event.price}</span>
                         <Button 
                           size="sm"
-                          onClick={() => navigate('/booking')}
+                          onClick={() => navigate('/book/tours')}
                         >
                           Learn More
                         </Button>

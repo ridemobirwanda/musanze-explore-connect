@@ -45,7 +45,7 @@ const HeroSection = () => {
             variant="outline" 
             size="lg"
             className="border-2 border-white text-white hover:bg-white hover:text-primary transition-all duration-300 px-8 py-6 text-lg font-semibold"
-            onClick={() => navigate('/booking')}
+            onClick={() => navigate('/book/tours')}
           >
             Book Your Tour
           </Button>

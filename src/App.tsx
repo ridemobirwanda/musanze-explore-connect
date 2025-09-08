@@ -11,6 +11,9 @@ import TwinLakes from "./pages/TwinLakes";
 import MusanzeCaves from "./pages/MusanzeCaves";
 import CulturalVillages from "./pages/CulturalVillages";
 import BookingPage from "./pages/BookingPage";
+import BookRooms from "./pages/BookRooms";
+import BookGuides from "./pages/BookGuides";
+import BookTours from "./pages/BookTours";
 import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./pages/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -66,6 +69,24 @@ const App = () => (
               <>
                 <Navigation />
                 <BookingPage />
+              </>
+            } />
+            <Route path="/book/rooms" element={
+              <>
+                <Navigation />
+                <BookRooms />
+              </>
+            } />
+            <Route path="/book/guides" element={
+              <>
+                <Navigation />
+                <BookGuides />
+              </>
+            } />
+            <Route path="/book/tours" element={
+              <>
+                <Navigation />
+                <BookTours />
               </>
             } />
             

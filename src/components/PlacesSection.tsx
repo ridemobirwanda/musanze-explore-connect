@@ -94,7 +94,7 @@ const PlacesSection = () => {
                   </div>
                   <Button 
                     className="bg-gradient-hero text-white shadow-soft hover:shadow-lg transition-all duration-300"
-                    onClick={() => navigate('/booking')}
+                    onClick={() => navigate('/book/tours')}
                   >
                     Book Now
                   </Button>
