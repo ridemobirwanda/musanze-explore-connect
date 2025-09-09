@@ -187,7 +187,7 @@ const BookGuides = () => {
                 <img 
                   src={guide.image} 
                   alt={guide.name}
-                  className="w-full h-48 object-cover rounded-t-lg"
+                  className="w-full h-32 object-cover rounded-t-lg"
                 />
                 <Badge className="absolute top-2 right-2 bg-black/70 text-white">
                   <Star className="h-3 w-3 mr-1 fill-current" />
@@ -201,7 +201,7 @@ const BookGuides = () => {
                 </Badge>
               </div>
               
-              <CardContent className="p-6">
+              <CardContent className="p-4">
                 <div className="mb-4">
                   <h3 className="font-semibold text-lg mb-1">{guide.name}</h3>
                   <p className="text-sm text-primary font-medium mb-1">{guide.specialty}</p>
