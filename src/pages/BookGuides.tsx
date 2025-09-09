@@ -10,6 +10,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon, Star, Users, MapPin, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { ImageCarousel } from "@/components/ui/image-carousel";
+
+// Import guide images
+import guideJean from "@/assets/guide-jean.jpg";
+import guideMarie from "@/assets/guide-marie.jpg";
+import guidePaul from "@/assets/guide-paul.jpg";
+import tourGuide from "@/assets/tour-guide.jpg";
 
 const guides = [
   {
@@ -20,7 +27,7 @@ const guides = [
     languages: ["English", "French", "Kinyarwanda"],
     rating: 4.9,
     price: "$80/day",
-    image: "/placeholder.svg",
+    images: [guideJean, tourGuide],
     description: "Certified gorilla trekking guide with extensive knowledge of Virunga ecosystem",
     expertise: ["Gorilla Behavior", "Photography Tips", "Wildlife Tracking"],
     availability: "Available"
@@ -33,7 +40,7 @@ const guides = [
     languages: ["English", "French", "Kinyarwanda", "Swahili"],
     rating: 4.8,
     price: "$60/day",
-    image: "/placeholder.svg",
+    images: [guideMarie, tourGuide],
     description: "Local cultural expert specializing in traditional crafts and community visits",
     expertise: ["Cultural Heritage", "Traditional Crafts", "Local History"],
     availability: "Available"
@@ -46,7 +53,7 @@ const guides = [
     languages: ["English", "French", "Kinyarwanda"],
     rating: 4.9,
     price: "$70/day",
-    image: "/placeholder.svg",
+    images: [guidePaul, tourGuide],
     description: "Professional mountain guide for volcano hiking and cave exploration",
     expertise: ["Mountain Climbing", "Cave Exploration", "Safety Protocols"],
     availability: "Available"
@@ -72,13 +79,8 @@ const BookGuides = () => {
     }
   }, [searchParams]);
 
-  const handleBookGuide = (guideId: number) => {
-    if (!tourDate || !tourType) {
-      alert("Please select tour date and type");
-      return;
-    }
-    console.log(`Booking guide ${guideId} for ${tourType} on ${tourDate} for ${groupSize} people`);
-    // Handle booking logic here
+  const handleGuideDetails = (guideId: number) => {
+    navigate(`/guides/${guideId}`);
   };
 
   return (
@@ -179,15 +181,17 @@ const BookGuides = () => {
           {guides.map((guide) => (
             <Card 
               key={guide.id} 
-              className={`group hover:shadow-lg transition-all duration-300 ${
+              className={`group hover:shadow-lg hover-scale transition-all duration-300 cursor-pointer ${
                 selectedGuide === guide.id.toString() ? 'ring-2 ring-primary' : ''
               }`}
+              onClick={() => handleGuideDetails(guide.id)}
             >
               <div className="relative">
-                <img 
-                  src={guide.image} 
+                <ImageCarousel
+                  images={guide.images}
                   alt={guide.name}
-                  className="w-full h-32 object-cover rounded-t-lg"
+                  autoSlide={true}
+                  slideInterval={20000}
                 />
                 <Badge className="absolute top-2 right-2 bg-black/70 text-white">
                   <Star className="h-3 w-3 mr-1 fill-current" />
@@ -236,7 +240,14 @@ const BookGuides = () => {
                     {guide.price}
                   </div>
                   <Button 
-                    onClick={() => handleBookGuide(guide.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!tourDate || !tourType) {
+                        alert("Please select tour date and type");
+                        return;
+                      }
+                      console.log(`Booking guide ${guide.id} for ${tourType} on ${tourDate} for ${groupSize} people`);
+                    }}
                     className="bg-gradient-hero text-white hover:shadow-lg transition-all duration-300"
                   >
                     Book Guide

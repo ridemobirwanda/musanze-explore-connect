@@ -11,6 +11,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon, Bed, Users, Star, Wifi, Car, Coffee, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { ImageCarousel } from "@/components/ui/image-carousel";
+
+// Import room images
+import luxurySuite from "@/assets/luxury-suite.jpg";
+import standardRoom from "@/assets/standard-room.jpg";
+import familyVilla from "@/assets/family-villa.jpg";
+import hotelRoom from "@/assets/hotel-room.jpg";
 
 const rooms = [
   {
@@ -19,7 +26,7 @@ const rooms = [
     hotel: "Volcanoes Serena Hotel",
     price: "$350/night",
     rating: 4.9,
-    image: "/placeholder.svg",
+    images: [luxurySuite, hotelRoom],
     amenities: ["Mountain View", "King Bed", "WiFi", "Mini Bar", "Room Service"],
     capacity: "2 guests",
     description: "Spacious suite with stunning views of Virunga volcanoes"
@@ -30,7 +37,7 @@ const rooms = [
     hotel: "Mountain Gorilla View Lodge",
     price: "$180/night",
     rating: 4.6,
-    image: "/placeholder.svg",
+    images: [standardRoom, hotelRoom],
     amenities: ["Garden View", "Double Bed", "WiFi", "Hot Shower"],
     capacity: "2 guests",
     description: "Comfortable room with modern amenities and garden views"
@@ -41,7 +48,7 @@ const rooms = [
     hotel: "Five Volcanoes Boutique Hotel",
     price: "$450/night",
     rating: 4.8,
-    image: "/placeholder.svg",
+    images: [familyVilla, luxurySuite],
     amenities: ["Private Terrace", "2 Bedrooms", "Living Area", "Kitchen"],
     capacity: "4-6 guests",
     description: "Perfect for families with separate bedrooms and living space"
@@ -63,13 +70,8 @@ const BookRooms = () => {
     }
   }, [searchParams]);
 
-  const handleBookRoom = (roomId: number) => {
-    if (!checkIn || !checkOut) {
-      alert("Please select check-in and check-out dates");
-      return;
-    }
-    console.log(`Booking room ${roomId} from ${checkIn} to ${checkOut} for ${guests} guests`);
-    // Handle booking logic here
+  const handleRoomDetails = (roomId: number) => {
+    navigate(`/rooms/${roomId}`);
   };
 
   return (
@@ -179,15 +181,17 @@ const BookRooms = () => {
           {rooms.map((room) => (
             <Card 
               key={room.id} 
-              className={`group hover:shadow-lg transition-all duration-300 ${
+              className={`group hover:shadow-lg hover-scale transition-all duration-300 cursor-pointer ${
                 selectedRoom === room.id.toString() ? 'ring-2 ring-primary' : ''
               }`}
+              onClick={() => handleRoomDetails(room.id)}
             >
               <div className="relative">
-                <img 
-                  src={room.image} 
+                <ImageCarousel
+                  images={room.images}
                   alt={room.name}
-                  className="w-full h-32 object-cover rounded-t-lg"
+                  autoSlide={true}
+                  slideInterval={20000}
                 />
                 <Badge className="absolute top-2 right-2 bg-black/70 text-white">
                   <Star className="h-3 w-3 mr-1 fill-current" />
@@ -233,7 +237,14 @@ const BookRooms = () => {
                     {room.price}
                   </div>
                   <Button 
-                    onClick={() => handleBookRoom(room.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!checkIn || !checkOut) {
+                        alert("Please select check-in and check-out dates");
+                        return;
+                      }
+                      console.log(`Booking room ${room.id} from ${checkIn} to ${checkOut} for ${guests} guests`);
+                    }}
                     className="bg-gradient-hero text-white hover:shadow-lg transition-all duration-300"
                   >
                     Book Now

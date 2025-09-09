@@ -10,6 +10,17 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon, Clock, Users, MapPin, Star, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { ImageCarousel } from "@/components/ui/image-carousel";
+
+// Import tour images
+import gorillaAttraction from "@/assets/gorilla-attraction.jpg";
+import gorillaClose from "@/assets/gorilla-close.jpg";
+import goldenMonkey from "@/assets/golden-monkey.jpg";
+import volcanoHike from "@/assets/volcano-hike.jpg";
+import musanzeHero from "@/assets/musanze-hero.jpg";
+import culturalVillage from "@/assets/cultural-village.jpg";
+import twinLakes from "@/assets/twin-lakes.jpg";
+import caveExploration from "@/assets/cave-exploration.jpg";
 
 const tours = [
   {
@@ -20,7 +31,7 @@ const tours = [
     price: "$1,500/person",
     maxGroup: 8,
     rating: 4.9,
-    image: "/placeholder.svg",
+    images: [gorillaAttraction, gorillaClose],
     description: "Once-in-a-lifetime opportunity to observe mountain gorillas in their natural habitat",
     includes: ["Park Permits", "Expert Guide", "Lunch", "Transport", "Equipment"],
     highlights: ["Mountain Gorilla Encounter", "Virunga Forest Trek", "Photography Opportunities"],
@@ -34,7 +45,7 @@ const tours = [
     price: "$100/person",
     maxGroup: 12,
     rating: 4.7,
-    image: "/placeholder.svg",
+    images: [goldenMonkey, gorillaAttraction],
     description: "Track the endangered golden monkeys through bamboo forests",
     includes: ["Park Entry", "Guide", "Light Refreshments", "Transport"],
     highlights: ["Golden Monkey Sighting", "Bamboo Forest Walk", "Bird Watching"],
@@ -48,7 +59,7 @@ const tours = [
     price: "$200/person",
     maxGroup: 10,
     rating: 4.8,
-    image: "/placeholder.svg",
+    images: [volcanoHike, musanzeHero],
     description: "Hike to the summit of Bisoke or Karisimbi volcano for spectacular views",
     includes: ["Guide", "Packed Lunch", "Equipment", "Transport", "First Aid Kit"],
     highlights: ["Crater Lake Views", "Alpine Vegetation", "Panoramic Vistas"],
@@ -62,7 +73,7 @@ const tours = [
     price: "$50/person",
     maxGroup: 15,
     rating: 4.6,
-    image: "/placeholder.svg",
+    images: [culturalVillage, musanzeHero],
     description: "Immerse yourself in traditional Rwandan culture at Iby'iwacu village",
     includes: ["Village Entry", "Cultural Activities", "Traditional Lunch", "Guide"],
     highlights: ["Traditional Dancing", "Craft Making", "Local Cuisine", "Storytelling"],
@@ -76,7 +87,7 @@ const tours = [
     price: "$120/person",
     maxGroup: 12,
     rating: 4.5,
-    image: "/placeholder.svg",
+    images: [twinLakes, musanzeHero],
     description: "Explore the beautiful Burera and Ruhondo lakes with stunning mountain backdrops",
     includes: ["Transport", "Boat Trip", "Lunch", "Guide", "Entrance Fees"],
     highlights: ["Lake Boat Cruise", "Mountain Views", "Bird Watching", "Local Communities"],
@@ -90,7 +101,7 @@ const tours = [
     price: "$40/person",
     maxGroup: 15,
     rating: 4.4,
-    image: "/placeholder.svg",
+    images: [caveExploration, gorillaAttraction],
     description: "Underground adventure through ancient lava tube caves",
     includes: ["Cave Entry", "Safety Equipment", "Guide", "Flashlights"],
     highlights: ["Underground Chambers", "Geological Formations", "Historical Significance"],
@@ -117,13 +128,8 @@ const BookTours = () => {
     }
   }, [searchParams]);
 
-  const handleBookTour = (tourId: number) => {
-    if (!tourDate) {
-      alert("Please select a tour date");
-      return;
-    }
-    console.log(`Booking tour ${tourId} on ${tourDate} for ${participants} participants`);
-    // Handle booking logic here
+  const handleTourDetails = (tourId: number) => {
+    navigate(`/tours/${tourId}`);
   };
 
   const filteredTours = categoryFilter === "all" 
@@ -227,15 +233,17 @@ const BookTours = () => {
           {filteredTours.map((tour) => (
             <Card 
               key={tour.id} 
-              className={`group hover:shadow-lg transition-all duration-300 ${
+              className={`group hover:shadow-lg hover-scale transition-all duration-300 cursor-pointer ${
                 selectedTour === tour.id.toString() ? 'ring-2 ring-primary' : ''
               }`}
+              onClick={() => handleTourDetails(tour.id)}
             >
               <div className="relative">
-                <img 
-                  src={tour.image} 
+                <ImageCarousel
+                  images={tour.images}
                   alt={tour.name}
-                  className="w-full h-32 object-cover rounded-t-lg"
+                  autoSlide={true}
+                  slideInterval={20000}
                 />
                 <Badge className="absolute top-2 right-2 bg-black/70 text-white">
                   <Star className="h-3 w-3 mr-1 fill-current" />
@@ -290,7 +298,14 @@ const BookTours = () => {
                     {tour.price}
                   </div>
                   <Button 
-                    onClick={() => handleBookTour(tour.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!tourDate) {
+                        alert("Please select a tour date");
+                        return;
+                      }
+                      console.log(`Booking tour ${tour.id} on ${tourDate} for ${participants} participants`);
+                    }}
                     className="bg-gradient-hero text-white hover:shadow-lg transition-all duration-300"
                   >
                     Book Tour
