@@ -15,7 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const AdminLayout = () => {
-  const { user, profile, canAccess, signOut, loading } = useAuth();
+  const { user, profile, canAccess, signOut, loading, isAdmin, isManager } = useAuth();
 
   if (loading) {
     return (
@@ -74,7 +74,7 @@ const AdminLayout = () => {
                       {profile?.email}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground capitalize">
-                      Role: {profile?.role}
+                      Role: {isAdmin ? 'Admin' : isManager ? 'Manager' : 'User'}
                     </p>
                   </div>
                 </DropdownMenuLabel>

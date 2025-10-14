@@ -25,11 +25,13 @@ interface UserProfile {
   user_id: string;
   email: string;
   full_name: string;
-  role: 'admin' | 'manager' | 'user';
   avatar_url: string;
   created_at: string;
   updated_at: string;
+  roles?: Array<{ role: 'admin' | 'manager' | 'user' }>;
 }
+
+type UserRole = 'admin' | 'manager' | 'user';
 
 const AdminUsers = () => {
   const { canAccess, loading: authLoading, isAdmin } = useAuth();
@@ -53,13 +55,27 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const { data, error } = await supabase
+      const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setUsers(data || []);
+      if (profilesError) throw profilesError;
+
+      // Fetch roles for all users
+      const { data: allRoles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+
+      if (rolesError) throw rolesError;
+
+      // Combine profiles with their roles
+      const usersWithRoles = (profiles || []).map(profile => ({
+        ...profile,
+        roles: (allRoles || []).filter(r => r.user_id === profile.user_id)
+      }));
+
+      setUsers(usersWithRoles);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
@@ -70,6 +86,12 @@ const AdminUsers = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const getUserRole = (user: UserProfile): UserRole => {
+    if (user.roles?.some(r => r.role === 'admin')) return 'admin';
+    if (user.roles?.some(r => r.role === 'manager')) return 'manager';
+    return 'user';
   };
 
   const filterUsers = () => {
@@ -83,13 +105,13 @@ const AdminUsers = () => {
     }
 
     if (roleFilter !== 'all') {
-      filtered = filtered.filter(user => user.role === roleFilter);
+      filtered = filtered.filter(user => getUserRole(user) === roleFilter);
     }
 
     setFilteredUsers(filtered);
   };
 
-  const updateUserRole = async (userId: string, newRole: 'admin' | 'manager' | 'user') => {
+  const updateUserRole = async (userId: string, newRole: UserRole) => {
     if (!isAdmin) {
       toast({
         title: 'Unauthorized',
@@ -100,16 +122,21 @@ const AdminUsers = () => {
     }
 
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
+      // Delete all existing roles for this user
+      await supabase
+        .from('user_roles')
+        .delete()
         .eq('user_id', userId);
+
+      // Insert the new role
+      const { error } = await supabase
+        .from('user_roles')
+        .insert({ user_id: userId, role: newRole });
 
       if (error) throw error;
 
-      setUsers(prev => prev.map(user => 
-        user.user_id === userId ? { ...user, role: newRole } : user
-      ));
+      // Refresh users list
+      await fetchUsers();
 
       toast({
         title: 'Success',
@@ -167,9 +194,9 @@ const AdminUsers = () => {
 
   const stats = {
     total: users.length,
-    admins: users.filter(u => u.role === 'admin').length,
-    managers: users.filter(u => u.role === 'manager').length,
-    regularUsers: users.filter(u => u.role === 'user').length,
+    admins: users.filter(u => getUserRole(u) === 'admin').length,
+    managers: users.filter(u => getUserRole(u) === 'manager').length,
+    regularUsers: users.filter(u => getUserRole(u) === 'user').length,
   };
 
   return (
@@ -272,12 +299,12 @@ const AdminUsers = () => {
                     <AvatarFallback>{getInitials(user.full_name || user.email)}</AvatarFallback>
                   </Avatar>
                   
-                  <div>
+                   <div>
                     <div className="flex items-center gap-3">
                       <h3 className="font-semibold text-lg">{user.full_name || 'Unnamed User'}</h3>
-                      <Badge className={getRoleColor(user.role)}>
-                        {getRoleIcon(user.role)}
-                        <span className="ml-1 capitalize">{user.role}</span>
+                      <Badge className={getRoleColor(getUserRole(user))}>
+                        {getRoleIcon(getUserRole(user))}
+                        <span className="ml-1 capitalize">{getUserRole(user)}</span>
                       </Badge>
                     </div>
                     <p className="text-muted-foreground">{user.email}</p>
@@ -290,8 +317,8 @@ const AdminUsers = () => {
                 {isAdmin && (
                   <div className="flex gap-2">
                     <Select
-                      value={user.role}
-                      onValueChange={(newRole: 'admin' | 'manager' | 'user') => 
+                      value={getUserRole(user)}
+                      onValueChange={(newRole: UserRole) => 
                         updateUserRole(user.user_id, newRole)
                       }
                     >

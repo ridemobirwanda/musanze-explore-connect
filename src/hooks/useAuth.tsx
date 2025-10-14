@@ -7,8 +7,11 @@ interface Profile {
   user_id: string;
   email: string;
   full_name: string | null;
-  role: 'admin' | 'manager' | 'user';
   avatar_url: string | null;
+}
+
+interface UserRole {
+  role: 'admin' | 'manager' | 'user';
 }
 
 interface AuthContextType {
@@ -39,25 +42,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userRoles, setUserRoles] = useState<UserRole[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
 
-      if (error) {
-        console.error('Error fetching profile:', error);
-        return null;
+      if (profileError) {
+        console.error('Error fetching profile:', profileError);
+        return { profile: null, roles: [] };
       }
 
-      return data;
+      const { data: rolesData, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId);
+
+      if (rolesError) {
+        console.error('Error fetching roles:', rolesError);
+        return { profile: profileData, roles: [] };
+      }
+
+      return { profile: profileData, roles: rolesData || [] };
     } catch (error) {
       console.error('Error in fetchProfile:', error);
-      return null;
+      return { profile: null, roles: [] };
     }
   };
 
@@ -72,12 +86,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // Keep loading true while fetching profile
           setLoading(true);
           setTimeout(async () => {
-            const profileData = await fetchProfile(session.user.id);
-            setProfile(profileData);
+            const { profile, roles } = await fetchProfile(session.user.id);
+            setProfile(profile);
+            setUserRoles(roles);
             setLoading(false);
           }, 0);
         } else {
           setProfile(null);
+          setUserRoles([]);
           setLoading(false);
         }
       }
@@ -91,8 +107,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (session?.user) {
         setLoading(true);
         setTimeout(async () => {
-          const profileData = await fetchProfile(session.user.id);
-          setProfile(profileData);
+          const { profile, roles } = await fetchProfile(session.user.id);
+          setProfile(profile);
+          setUserRoles(roles);
           setLoading(false);
         }, 0);
       } else {
@@ -146,8 +163,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error };
   };
 
-  const isAdmin = profile?.role === 'admin';
-  const isManager = profile?.role === 'manager';
+  const isAdmin = userRoles.some(r => r.role === 'admin');
+  const isManager = userRoles.some(r => r.role === 'manager');
   const canAccess = isAdmin || isManager;
 
   const value = {
