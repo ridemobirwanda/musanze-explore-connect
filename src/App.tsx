@@ -14,6 +14,9 @@ import BookingPage from "./pages/BookingPage";
 import BookRooms from "./pages/BookRooms";
 import BookGuides from "./pages/BookGuides";
 import BookTours from "./pages/BookTours";
+import TourDetails from "./pages/TourDetails";
+import GuideDetails from "./pages/GuideDetails";
+import RoomDetails from "./pages/RoomDetails";
 import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./pages/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -87,6 +90,24 @@ const App = () => (
               <>
                 <Navigation />
                 <BookTours />
+              </>
+            } />
+            <Route path="/tours/:id" element={
+              <>
+                <Navigation />
+                <TourDetails />
+              </>
+            } />
+            <Route path="/guides/:id" element={
+              <>
+                <Navigation />
+                <GuideDetails />
+              </>
+            } />
+            <Route path="/rooms/:id" element={
+              <>
+                <Navigation />
+                <RoomDetails />
               </>
             } />
             
