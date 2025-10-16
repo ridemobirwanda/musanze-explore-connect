@@ -35,24 +35,32 @@ serve(async (req) => {
       )
     }
 
-    // Create profile
-    const { error: profileError } = await supabaseAdmin
+    // Create profile (only if it doesn't exist)
+    const { data: existingProfile } = await supabaseAdmin
       .from('profiles')
-      .upsert({
-        user_id: authData.user.id,
-        email: 'admin@admin.com',
-        full_name: 'System Administrator'
-      })
+      .select('id')
+      .eq('user_id', authData.user.id)
+      .maybeSingle()
 
-    if (profileError) {
-      console.error('Profile error:', profileError)
-      return new Response(
-        JSON.stringify({ error: profileError.message }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      )
+    if (!existingProfile) {
+      const { error: profileError } = await supabaseAdmin
+        .from('profiles')
+        .insert({
+          user_id: authData.user.id,
+          email: 'admin@admin.com',
+          full_name: 'System Administrator'
+        })
+
+      if (profileError) {
+        console.error('Profile error:', profileError)
+        return new Response(
+          JSON.stringify({ error: profileError.message }),
+          { 
+            status: 400, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          }
+        )
+      }
     }
 
     // Assign admin role
