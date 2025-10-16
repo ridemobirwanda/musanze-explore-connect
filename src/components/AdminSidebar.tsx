@@ -8,7 +8,10 @@ import {
   Home,
   BookOpen,
   Map,
-  Shield
+  Shield,
+  Compass,
+  UserCheck,
+  Building2
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
@@ -28,6 +31,9 @@ const adminItems = [
   { title: 'Dashboard', url: '/admin', icon: BarChart3 },
   { title: 'Bookings', url: '/admin/bookings', icon: Calendar },
   { title: 'Users', url: '/admin/users', icon: Users },
+  { title: 'Tours', url: '/admin/tours', icon: Compass },
+  { title: 'Guides', url: '/admin/guides', icon: UserCheck },
+  { title: 'Hotels', url: '/admin/hotels', icon: Building2 },
   { title: 'Events', url: '/admin/events', icon: Calendar },
   { title: 'Content', url: '/admin/content', icon: FileText },
   { title: 'Payments', url: '/admin/payments', icon: CreditCard },

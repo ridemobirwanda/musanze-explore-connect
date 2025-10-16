@@ -143,6 +143,152 @@ export type Database = {
         }
         Relationships: []
       }
+      guides: {
+        Row: {
+          available: boolean | null
+          bio: string | null
+          created_at: string | null
+          email: string | null
+          experience_years: number | null
+          hourly_rate: number
+          id: string
+          image_url: string | null
+          languages: string[] | null
+          name: string
+          phone: string | null
+          rating: number | null
+          specialization: string
+          updated_at: string | null
+        }
+        Insert: {
+          available?: boolean | null
+          bio?: string | null
+          created_at?: string | null
+          email?: string | null
+          experience_years?: number | null
+          hourly_rate: number
+          id?: string
+          image_url?: string | null
+          languages?: string[] | null
+          name: string
+          phone?: string | null
+          rating?: number | null
+          specialization: string
+          updated_at?: string | null
+        }
+        Update: {
+          available?: boolean | null
+          bio?: string | null
+          created_at?: string | null
+          email?: string | null
+          experience_years?: number | null
+          hourly_rate?: number
+          id?: string
+          image_url?: string | null
+          languages?: string[] | null
+          name?: string
+          phone?: string | null
+          rating?: number | null
+          specialization?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      hotel_rooms: {
+        Row: {
+          amenities: string[] | null
+          available: boolean | null
+          created_at: string | null
+          description: string | null
+          hotel_id: string | null
+          id: string
+          image_url: string | null
+          max_guests: number | null
+          price_per_night: number
+          room_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          amenities?: string[] | null
+          available?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          hotel_id?: string | null
+          id?: string
+          image_url?: string | null
+          max_guests?: number | null
+          price_per_night: number
+          room_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          amenities?: string[] | null
+          available?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          hotel_id?: string | null
+          id?: string
+          image_url?: string | null
+          max_guests?: number | null
+          price_per_night?: number
+          room_type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hotel_rooms_hotel_id_fkey"
+            columns: ["hotel_id"]
+            isOneToOne: false
+            referencedRelation: "hotels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hotels: {
+        Row: {
+          amenities: string[] | null
+          created_at: string | null
+          description: string | null
+          email: string | null
+          id: string
+          image_url: string | null
+          location: string
+          name: string
+          phone: string | null
+          star_rating: number | null
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          amenities?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          location: string
+          name: string
+          phone?: string | null
+          star_rating?: number | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          amenities?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string
+          name?: string
+          phone?: string | null
+          star_rating?: number | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -170,6 +316,54 @@ export type Database = {
           id?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      tours: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          difficulty: string | null
+          duration: string
+          id: string
+          image_url: string | null
+          includes: string[] | null
+          location: string
+          max_guests: number
+          name: string
+          price: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty?: string | null
+          duration: string
+          id?: string
+          image_url?: string | null
+          includes?: string[] | null
+          location: string
+          max_guests?: number
+          name: string
+          price: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty?: string | null
+          duration?: string
+          id?: string
+          image_url?: string | null
+          includes?: string[] | null
+          location?: string
+          max_guests?: number
+          name?: string
+          price?: number
+          updated_at?: string | null
         }
         Relationships: []
       }
